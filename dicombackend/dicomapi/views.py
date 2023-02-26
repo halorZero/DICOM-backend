@@ -10,7 +10,7 @@ MEDIA_ROOT = os.path.join(settings.BASE_DIR, 'media')
 
 @csrf_exempt
 def dicom(x):
-    file = open('./image-000001.dcm','rb')
+    file = open('./media/image-000001.dcm','rb')
     res = FileResponse(file)
     res['Content-Type'] = 'application/octet-stream'
     res['Content-Disposition'] = 'attachment;filename="1.dcm"'
