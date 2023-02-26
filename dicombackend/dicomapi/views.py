@@ -19,4 +19,4 @@ def dicom(x):
 
 class File(View):
     def get(self, request, *args, **kwargs):
-        return JsonResponse({'url': "http://127.0.0.1/" + MEDIA_URL + "image-000001.dcm"})
+        return JsonResponse({'url': "http://127.0.0.1:8000/" + MEDIA_URL + "image-000001.dcm"})
