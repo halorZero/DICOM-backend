@@ -172,3 +172,5 @@ CORS_ALLOW_METHODS = (
     'PUT',
     'VIEW',
 )
+
+
