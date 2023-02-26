@@ -1,6 +1,6 @@
 from django.http import FileResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.views.generic import View
 import os
 from django.conf import settings
@@ -19,4 +19,6 @@ def dicom(x):
 
 class File(View):
     def get(self, request, *args, **kwargs):
-        return JsonResponse({'url': "http://127.0.0.1:8000/" + MEDIA_URL + "image-000001.dcm"})
+        response = HttpResponse("http://127.0.0.1:8000/" + MEDIA_URL + "image-000001.dcm")
+        response['Access-Control-Allow-Origin'] = 'http://localhost:8080'
+        return response
