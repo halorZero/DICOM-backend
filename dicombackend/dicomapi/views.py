@@ -18,6 +18,13 @@ def dicom(request, url=os.path.join(MEDIA_ROOT, 'image-000001.dcm')):
     res['Content-Disposition'] = 'attachment;filename="1.dcm"'
     return res
 
+@csrf_exempt
+def volume(request, url=os.path.join(MEDIA_ROOT, 'cottage_obj.obj')):
+    file = open(url, 'rb')
+    res = FileResponse(file)
+    res['Content-Type'] = 'application/octet-stream'
+    res['Content-Disposition'] = 'attachment;filename="cottage_obj.obj"'
+    return res
 
 def upload(request):
     if request.method == 'POST':
