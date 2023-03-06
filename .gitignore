@@ -133,5 +133,3 @@ dmypy.json
 /.idea/*
 
 # security
-media/*
-media/
