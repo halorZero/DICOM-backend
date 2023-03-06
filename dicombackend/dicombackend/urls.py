@@ -25,6 +25,7 @@ MEDIA_ROOT = os.path.join(settings.BASE_DIR, 'media')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('dicomapi.urls')),
+    path('api/dicomapi/', include('dicomapi.urls')),
+    path('api/user/', include('user.urls')),
     re_path('media/(?P<path>.*)', serve, {'document_root': MEDIA_ROOT}),
 ] + static(MEDIA_URL, document_root=MEDIA_ROOT)
