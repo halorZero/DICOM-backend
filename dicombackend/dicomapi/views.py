@@ -47,7 +47,8 @@ def upload(request):
         # X 2 DICOM
         pass
         dicom_name = date_name + '.dcm'
-        shutil.copyfile(os.path.join(settings.MEDIA_ROOT, 'image-000001.dcm'), os.path.join(settings.MEDIA_ROOT, 'dicom', dicom_name))
+        shutil.copyfile(os.path.join(settings.MEDIA_ROOT, 'image-000001.dcm'),
+                        os.path.join(settings.MEDIA_ROOT, 'dicom', dicom_name))
         # X 2 DICOM
 
         return dicom(request, url=os.path.join(settings.MEDIA_ROOT, 'dicom', dicom_name))
