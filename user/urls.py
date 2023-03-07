@@ -1,7 +1,11 @@
 from django.urls import path
-from .views import *
+from .views import Users, Update
 
 urlpatterns = [
-    path('login/', Users.as_view(mode=0)),
-    path('register/', Users.as_view(mode=1)),
+    path('register/', Users.as_view(name='register')),
+    path('login/', Users.as_view(name='login')),
+    path('logout/', Users.as_view(name='logout')),
+    path('update/avatar/', Update.as_view(name='avatar')),
+    path('update/info/', Update.as_view(name='info')),
+    path('changepwd/', Update.as_view(name='pwd')),
 ]

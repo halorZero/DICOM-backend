@@ -1,37 +1,77 @@
+from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
 from django.views import View
-from .models import User
+
+from .models import MyUser as User
 
 
 class Users(View):
-    mode = 0
+    name = ''
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request):
         username = request.POST.get('username')
-        if self.mode == 0:  # login
-            try:
-                user = User.objects.get(username=username)
-            except:
-                return JsonResponse({'errno': 1001, 'msg': "用户不存在"})
-            password = request.POST.get('password')
-            if user.password == password:
-                return JsonResponse({'errno': 0, 'msg': "登录成功"})
-            else:
-                return JsonResponse({'errno': 1002, 'msg': "密码错误"})
-        elif self.mode == 1:  # register
-            users = User.objects.filter(username=username)
-            if len(users) != 0:
-                return JsonResponse({'errno': 1003, 'msg': "用户名已被占用"})
-            password1 = request.POST.get('password1')
-            password2 = request.POST.get('password2')
-            if password2 != password1:
-                return JsonResponse({'errno': 1004, 'msg': "两次输入的密码不相同"})
-            name = request.POST.get('name')
-            sex = request.POST.get('sex')
-            profile = request.POST.get('profile')
-            new_user = User(username=username, password=password1, name=name, sex=sex, profile=profile)
-            new_user.save()
-            return JsonResponse({'errno': 0, 'msg': "注册成功"})
+        if self.name == 'register':
+            user_filter = User.objects.filter(username=username)
+            if len(user_filter) >= 1:
+                return JsonResponse({'errno': 1000, 'msg': "username has been used"})
+            pwd1 = request.POST.get('pwd1')
+            pwd2 = request.POST.get('pwd2')
+            if pwd1 != pwd2:
+                return JsonResponse({'errno': 1001, 'msg': "password unmatch"})
+            User.objects.create_user(username=username, password=pwd1)
+            return JsonResponse({'errno': 0, 'msg': "register success"})
+        elif self.name == 'login':
+            pwd = request.POST.get('pwd')
+            user = authenticate(username=username, password=pwd)
+            if not user:
+                return JsonResponse({'errno': 1002, 'msg': "wrong password"})
+            login(request, user)
+            return JsonResponse({'errno': 0, 'msg': "login success"})
+
+    def get(self, request):
+        if self.name == 'logout':
+            logout(request)
+            return JsonResponse({'errno': 0, 'msg': "logout success"})
 
 
+class Update(View):
+    name = ''
 
+    def post(self, request):
+        if self.name == 'avatar':
+            session_store = request.session
+            if len(session_store.items()) == 0:
+                return JsonResponse({'errno': 1003, 'msg': "please login first"})
+            user = User.objects.get(id=session_store.get('_auth_user_id'))
+            avatar = request.FILES.get('avatar')
+            user.avatar = avatar
+            user.save()
+            return JsonResponse({'errno': 0, 'msg': "update avatar success"})
+        elif self.name == 'info':
+            session_store = request.session
+            if len(session_store.items()) == 0:
+                return JsonResponse({'errno': 1003, 'msg': "please login first"})
+            user = User.objects.get(id=session_store.get('_auth_user_id'))
+            email = request.POST.get('email')
+            bio = request.POST.get('bio')
+            first_name = request.POST.get('first_name')
+            last_name = request.POST.get('last_name')
+            user.email = email
+            user.bio = bio
+            user.first_name = first_name
+            user.last_name = last_name
+            user.save()
+            return JsonResponse({'errno': 0, 'msg': "update info success"})
+        elif self.name == 'pwd':
+            session_store = request.session
+            if len(session_store.items()) == 0:
+                return JsonResponse({'errno': 1003, 'msg': "please login first"})
+            user = User.objects.get(id=session_store.get('_auth_user_id'))
+            pwd = request.POST.get('pwd')
+            new_pwd = request.POST.get('new_pwd')
+            auth_user = authenticate(username=user.username, password=pwd)
+            if not auth_user:
+                return JsonResponse({'errno': 1002, 'msg': "wrong password"})
+            user.set_password(new_pwd)
+            user.save()
+            return JsonResponse({'errno': 0, 'msg': 'change password success'})
