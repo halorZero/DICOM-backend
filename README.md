@@ -138,6 +138,7 @@
 > bio: text
 > first_name: string
 > last_name: string
+> sex: shortint (0 male, 1 female)
 > ```
 > 
 > 返回内容：(json)
