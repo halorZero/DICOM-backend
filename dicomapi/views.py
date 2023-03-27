@@ -1,5 +1,6 @@
 from django.http import FileResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
 import os
 import datetime
 import shutil
@@ -7,7 +8,7 @@ from django.conf import settings
 
 
 @csrf_exempt
-def dicom(request, url=os.path.join(settings.MEDIA_ROOT, '11/1-001.dcm')):
+def dicom(request, url=os.path.join(settings.MEDIA_ROOT, 'dcm11/1-001.dcm')):
     file = open(url, 'rb')
     res = FileResponse(file)
     res['Content-Type'] = 'application/octet-stream'
@@ -15,7 +16,7 @@ def dicom(request, url=os.path.join(settings.MEDIA_ROOT, '11/1-001.dcm')):
     return res
 
 @csrf_exempt
-def dicom2(request, url=os.path.join(settings.MEDIA_ROOT, '11/1-001.dcm')):
+def dicom2(request, url=os.path.join(settings.MEDIA_ROOT, 'dcm11/1-001.dcm')):
     file = open(url, 'rb')
     res = FileResponse(file)
     res['Content-Type'] = 'application/octet-stream'
@@ -23,21 +24,28 @@ def dicom2(request, url=os.path.join(settings.MEDIA_ROOT, '11/1-001.dcm')):
     return res
 
 @csrf_exempt
-def dicom3(request, url=os.path.join(settings.MEDIA_ROOT, '11/1-001.dcm')):
+def dicom3(request, url=os.path.join(settings.MEDIA_ROOT, 'dcm11/1-001.dcm')):
     file = open(url, 'rb')
     res = FileResponse(file)
     res['Content-Type'] = 'application/octet-stream'
     res['Content-Disposition'] = 'attachment;filename="1.dcm"'
     return res
+
+def dicom4length(request):
+    name=request.POST.get('name')
+    url=os.path.join(settings.MEDIA_ROOT, name)
+    print(url)
+    length=len(os.listdir(url))
+    return JsonResponse({'errno': 0, 'length': length})
 
 def dicom4(request):
     id=request.GET.get('id')
     if(len(id)<2):
-        url=os.path.join(settings.MEDIA_ROOT, '11/1-00'+id+'.dcm')
+        url=os.path.join(settings.MEDIA_ROOT, 'dcm11/1-00'+id+'.dcm')
     elif(len(id)<3):
-        url=os.path.join(settings.MEDIA_ROOT, '11/1-0'+id+'.dcm')
+        url=os.path.join(settings.MEDIA_ROOT, 'dcm11/1-0'+id+'.dcm')
     else:
-        url=os.path.join(settings.MEDIA_ROOT, '11/1-'+id+'.dcm')
+        url=os.path.join(settings.MEDIA_ROOT, 'dcm11/1-'+id+'.dcm')
     file = open(url, 'rb')
     res = FileResponse(file)
     res['Content-Type'] = 'application/octet-stream'

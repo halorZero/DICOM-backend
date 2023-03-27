@@ -10,7 +10,7 @@ __pycache__/
 # Distribution / packaging
 .Python
 build/
-media/11/
+media/dcm11/
 develop-eggs/
 dist/
 downloads/

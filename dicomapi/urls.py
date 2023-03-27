@@ -7,5 +7,6 @@ urlpatterns = [
     path('dicom2/', dicom2),
     path('dicom3/', dicom3),
     path('dicom4/', dicom4),
+    path('dcmlength/', dicom4length),
     path('volume/', volume),
 ]
