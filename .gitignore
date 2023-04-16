@@ -11,6 +11,8 @@ __pycache__/
 .Python
 build/
 media/dcm11/
+media/test1/
+media/111.vtk
 develop-eggs/
 dist/
 downloads/
