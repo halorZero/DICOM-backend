@@ -56,12 +56,12 @@ def dicom4(request):
     return res
 
 @csrf_exempt
-def volume(request, url=os.path.join(settings.MEDIA_ROOT, 'cottage_obj.obj')):
+def volume(request, url=os.path.join(settings.MEDIA_ROOT, '1.obj')):
     id=request.GET.get('id')
     file = open(url, 'rb')
     res = FileResponse(file)
     res['Content-Type'] = 'application/octet-stream'
-    res['Content-Disposition'] = 'attachment;filename="cottage_obj.obj"'
+    res['Content-Disposition'] = 'attachment;filename="1.obj"'
     return res
 
 def x2ct(request, url=os.path.join(settings.MEDIA_ROOT)):
